@@ -21,7 +21,7 @@ public class InputHandler : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.anyKeyDown)
             _invoker.ExecuteCommand(_buttonA);
         Debug.Log("part1");
     }

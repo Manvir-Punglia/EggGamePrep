@@ -3,36 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class ChickenSpawner : MonoBehaviour
+public class ChickenSpawner : Singleton<ChickenSpawner>
 {
-    [FormerlySerializedAs("buildingPrefabs")]
     public GameObject[] chicPrefabs;
 
     public Transform spawnPoint;
     IFactory fac;
 
+    public List<GameObject> chickenInstances = new List<GameObject>();
+
     void Awake()
     {
-        int rand = Random.Range(0, chicPrefabs.Length);
-
-
-        IFactory fac = new ChickenFactory(chicPrefabs[rand]);
+        IFactory fac = new ChickenFactory(chicPrefabs[0]);
 
         GameObject _Chicken = fac.CreateProduct();
 
 
         _Chicken.transform.position = spawnPoint.position;
         _Chicken.transform.rotation = spawnPoint.rotation;
-        
+
+        chickenInstances.Add(_Chicken);
     }
 
     public void Spawn()
     {
-        int rand = Random.Range(0, chicPrefabs.Length);
-        IFactory fac = new ChickenFactory(chicPrefabs[rand]);
+        int rand = Random.Range(0, 10);
+        int result = 0;
+        if (rand == 0) result = 1;
+        if (rand > 0) result = 0;
+        
+        IFactory fac = new ChickenFactory(chicPrefabs[result]);
         GameObject _Chicken = fac.CreateProduct();
         _Chicken.transform.position = spawnPoint.position;
         _Chicken.transform.rotation = spawnPoint.rotation;
         Debug.Log("Final");
+        if (result == 0)
+        {
+            chickenInstances.Add(_Chicken);
+        }
     }
 }

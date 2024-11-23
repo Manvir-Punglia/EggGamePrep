@@ -8,6 +8,8 @@ public class Chicken : Subject
     private  static ChickenData chickenData;
     public ChickenDisplay display;
     private Rigidbody rb;
+    private ChickenSpawner _spawner;
+    
 
     public void Initialize(ChickenData sharedData)
     {
@@ -19,6 +21,7 @@ public class Chicken : Subject
         rb = GetComponent<Rigidbody>();
         chickenData = GameObject.Find("GameManager").GetComponent<ChickenData>();
         display = GameObject.Find("GameManager").GetComponent<ChickenDisplay>();
+        _spawner = (ChickenSpawner)FindObjectOfType(typeof(ChickenSpawner));
         Attach(display);
     }
 
@@ -50,8 +53,14 @@ public class Chicken : Subject
         if (other.gameObject.tag == "Barn")
         {
             NotifyObservers();
+            _spawner.chickenInstances.Remove(this.gameObject);
             Destroy(this.gameObject);
         }
+
+        /*if (other.gameObject.tag == "Evil")
+        {
+            Destroy(this.gameObject);
+        }*/
 
        
     }
